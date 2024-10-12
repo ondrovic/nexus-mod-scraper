@@ -5,6 +5,7 @@ import (
 	"nexus-mods-scraper/internal/utils/exporters"
 	"nexus-mods-scraper/internal/utils/extractors"
 	"nexus-mods-scraper/internal/utils/formatters"
+	"nexus-mods-scraper/internal/utils/storage"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -30,7 +31,7 @@ func init() {
 }
 
 func initExtractFlags(cmd *cobra.Command) {
-	cli.RegisterFlag(cmd, "output-directory", "d", "data", "Output directory to save the file in", &options.OutputDirectory)
+	cli.RegisterFlag(cmd, "output-directory", "d", storage.GetDataStoragePath(), "Output directory to save the file in", &options.OutputDirectory)
 	cli.RegisterFlag(cmd, "output-filename", "f", "session-cookies.json", "Filename to save the session cookies to", &outputFilename)
 	cli.RegisterFlag(cmd, "valid-cookie-names", "c", []string{"nexusmods_session", "nexusmods_session_refresh"}, "Names of the cookies to extract", &options.ValidCookies)
 }

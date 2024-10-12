@@ -2,24 +2,23 @@ package cli
 
 import (
 	"fmt"
+	"github.com/chelnak/ysmrr"
+	"github.com/chelnak/ysmrr/pkg/animations"
+	"github.com/chelnak/ysmrr/pkg/colors"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
 	"nexus-mods-scraper/internal/fetchers"
 	"nexus-mods-scraper/internal/httpclient"
 	"nexus-mods-scraper/internal/types"
 	"nexus-mods-scraper/internal/utils"
 	"nexus-mods-scraper/internal/utils/cli"
 	"nexus-mods-scraper/internal/utils/exporters"
-	"path/filepath"
-	// "sync"
-
-	// "nexus-mods-scraper/internal/utils/extractors"
 	"nexus-mods-scraper/internal/utils/formatters"
-	"strings"
+	"nexus-mods-scraper/internal/utils/storage"
 
-	"github.com/chelnak/ysmrr"
-	"github.com/chelnak/ysmrr/pkg/animations"
-	"github.com/chelnak/ysmrr/pkg/colors"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"path/filepath"
+	"strings"
 )
 
 var (
@@ -49,7 +48,7 @@ func initScrapeFlags(cmd *cobra.Command) {
 	cli.RegisterFlag(cmd, "cookie-filename", "f", "session-cookies.json", "Filename where the cookies are stored", &options.CookieFile)
 	cli.RegisterFlag(cmd, "display-results", "r", false, "Do you want to display the results in the terminal?", &options.DisplayResults)
 	cli.RegisterFlag(cmd, "save-results", "s", false, "Do you want to save the results to a JSON file?", &options.SaveResults)
-	cli.RegisterFlag(cmd, "output-directory", "o", "data", "Output directory to save files", &options.OutputDirectory)
+	cli.RegisterFlag(cmd, "output-directory", "o", storage.GetDataStoragePath(), "Output directory to save files", &options.OutputDirectory)
 	cli.RegisterFlag(cmd, "valid-cookie-names", "c", []string{"nexusmods_session", "nexusmods_session_refresh"}, "Names of the cookies to extract", &options.ValidCookies)
 }
 
