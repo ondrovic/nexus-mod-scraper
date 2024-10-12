@@ -10,18 +10,21 @@ import (
 	"path/filepath"
 )
 
-// HTTPClient is an interface to abstract the Do method for the HTTP client.
+// HTTPClient is an interface that defines a single method, Do, for executing an
+// HTTP request and returning the response or an error. It allows for easy mocking
+// or swapping of different HTTP client implementations.
 type HTTPClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
-// Client is a global variable holding the HTTP client used for making requests.
+// Client is a variable of type HTTPClient, representing the HTTP client that
+// will be used to send HTTP requests. It can be set to any implementation of
+// the HTTPClient interface.
 var Client HTTPClient
 
-// InitClient initializes an HTTP client with cookie support.
-// It creates an HTTP client with a custom CookieJar that manages cookies across requests.
-// Returns:
-// - An error if any issues occur during client initialization (returns nil in this implementation).
+// InitClient initializes the HTTP client with a new CookieJar for managing cookies.
+// It also loads cookies from the specified file and sets them for the given domain.
+// Returns an error if the CookieJar creation or setting cookies fails.
 func InitClient(domain, dir, filename string) error {
 	// Create a new CookieJar
 	jar, err := cookiejar.New(nil)
@@ -42,8 +45,9 @@ func InitClient(domain, dir, filename string) error {
 	return nil
 }
 
-// setCookiesFromFile reads a JSON file containing cookies, combines the directory and filepath,
-// and sets the cookies for the specified domain.
+// setCookiesFromFile reads cookies from a JSON file, creates HTTP cookie objects,
+// and sets them for the specified domain in the client's CookieJar. Returns an error
+// if the file cannot be opened, the JSON cannot be decoded, or the domain is invalid.
 func setCookiesFromFile(domain, dir, filename string) error {
 	// Combine dir and filename
 	cookieFilePath := filepath.Join(dir, filename)

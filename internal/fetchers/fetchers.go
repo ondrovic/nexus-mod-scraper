@@ -14,56 +14,10 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func FetchModInfoSequential(baseUrl, game string, modId int64) (types.Results, error) {
-	modUrl := fmt.Sprintf("%s/%s/mods/%d", baseUrl, game, modId)
-
-	// Validate the initial URL
-	if _, err := url.Parse(modUrl); err != nil {
-		return types.Results{}, err
-	}
-
-	var results types.Results
-
-	// Fetch mod info
-	doc, err := fetchDocument(modUrl)
-	if err != nil {
-		return results, err
-	}
-
-	// Check for adult content
-	if extractors.IsAdultContent(doc, modId) {
-		return results, fmt.Errorf("adult content detected, cookies not working")
-	}
-
-	// Extract mod info
-	results.Mods = extractors.ExtractModInfo(doc)
-	results.Mods.ModId = modId
-	results.Mods.LastChecked = time.Now()
-
-	// Construct files tab URL
-	filesTabURL := fmt.Sprintf("%s?tab=files", modUrl)
-
-	// Validate files tab URL
-	if _, err := url.Parse(filesTabURL); err != nil {
-		return results, err
-	}
-
-	// Fetch file info from files tab URL
-	filesDoc, err := fetchDocument(filesTabURL)
-	if err != nil {
-		return results, err
-	}
-
-	// Extract file info
-	results.Mods.Files = extractors.ExtractFileInfo(filesDoc)
-	if len(results.Mods.Files) > 0 {
-		results.Mods.LatestVersion = results.Mods.Files[0].Version
-	}
-
-	return results, nil
-}
-
-// FetchModInfoConcurrent fetches mod information and file details from the given URL.
+// FetchModInfoConcurrent retrieves mod information and file details concurrently for
+// a given mod ID and game. It validates URLs and uses concurrent fetch operations
+// for mod info and file info extraction. The results are populated in the Results struct,
+// and an error is returned if any fetch or extraction fails.
 func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, error) {
 	modUrl := fmt.Sprintf("%s/%s/mods/%d", baseUrl, game, modId)
 
@@ -120,7 +74,10 @@ func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, e
 	return results, nil
 }
 
-// fetchDocument fetches and parses the HTML document from the given URL using the global httpclient.Client
+// fetchDocument sends an HTTP GET request to the target URL, manually attaches cookies
+// from the HTTP client's cookie jar, and returns the response as a parsed goquery document.
+// It ensures a successful 200 OK status before parsing and returns an error if the request
+// or document parsing fails.
 func fetchDocument(targetURL string) (*goquery.Document, error) {
 	// Create a new HTTP GET request
 	req, err := http.NewRequest("GET", targetURL, nil)

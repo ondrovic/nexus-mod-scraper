@@ -6,9 +6,10 @@ require (
 	github.com/PuerkitoBio/goquery v1.10.0
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/browserutils/kooky v0.2.2
-	github.com/chelnak/ysmrr v0.4.0
+	github.com/savioxavier/termlink v1.4.1
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
+	github.com/theckman/yacspin v0.13.12
 	go.szostok.io/version v1.2.0
 )
 

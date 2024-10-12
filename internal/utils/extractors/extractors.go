@@ -14,7 +14,9 @@ import (
 	_ "github.com/browserutils/kooky/browser/all"
 )
 
-// IsAdultContent checks if the page contains an adult content warning.
+// IsAdultContent checks if the mod identified by modId is marked as "Adult content"
+// in the goquery document. It looks for an h3 tag with the corresponding modId
+// and returns true if the text matches "Adult content".
 // AKA your not logged in.
 func IsAdultContent(doc *goquery.Document, modId int64) bool {
 	// Format the ID of the h3 tag based on the modId
@@ -32,8 +34,10 @@ func IsAdultContent(doc *goquery.Document, modId int64) bool {
 	return false
 }
 
-// CookieExtractor extracts specific cookies from all browser cookie stores
-// and returns them as a map where cookie.Name is the key and cookie.Value is the value.
+// CookieExtractor extracts cookies for a given domain from all available browser
+// cookie stores. It filters cookies based on the provided validCookies list and
+// returns a map of matching cookies. Returns an error if no cookies or stores
+// are found, or if reading cookies from a store fails.
 func CookieExtractor(domain string, validCookies []string) (map[string]string, error) {
 	// Declare a map to store cookies
 	cookies := make(map[string]string)
@@ -84,6 +88,9 @@ func CookieExtractor(domain string, validCookies []string) (map[string]string, e
 	return cookies, nil
 }
 
+// extractChangeLogs parses a goquery document to extract versioned change logs.
+// It looks for specific elements containing version and log notes, and returns
+// a slice of ChangeLog objects with the version and corresponding notes.
 func extractChangeLogs(doc *goquery.Document) []types.ChangeLog {
 	var changeLogs []types.ChangeLog
 
@@ -109,10 +116,15 @@ func extractChangeLogs(doc *goquery.Document) []types.ChangeLog {
 	return changeLogs
 }
 
+// extractElementText retrieves and formats the text content of the first element
+// matching the provided CSS selector from a goquery document.
 func extractElementText(doc *goquery.Document, selector string) string {
 	return formatters.CleanAndFormatText(doc.Find(selector).Text())
 }
 
+// extractCleanTextExcludingElementText retrieves the text content of the first
+// element matching the selector, removes any text from the excluded sub-elements
+// matching elem, and returns the cleaned and formatted text.
 func extractCleanTextExcludingElementText(doc *goquery.Document, selector, elem string) string {
 	selection := doc.Find(selector).First()
 	if selection.Length() == 0 {
@@ -125,6 +137,9 @@ func extractCleanTextExcludingElementText(doc *goquery.Document, selector, elem 
 	return formatters.CleanAndFormatText(text)
 }
 
+// ExtractFileInfo parses a goquery document to extract file information, such as
+// name, version, upload date, file size, unique downloads, total downloads, and
+// description. Returns a slice of File objects with the extracted details.
 func ExtractFileInfo(doc *goquery.Document) []types.File {
 	fileElements := doc.Find(".file-expander-header")
 	files := make([]types.File, 0, fileElements.Length())
@@ -145,6 +160,10 @@ func ExtractFileInfo(doc *goquery.Document) []types.File {
 	return files
 }
 
+// ExtractModInfo parses a goquery document to extract detailed mod information,
+// including name, last updated date, original upload date, creator, changelogs,
+// uploader, virus status, short description, full description, tags, dependencies,
+// and mods requiring this file. Returns a ModInfo object with the extracted details.
 func ExtractModInfo(doc *goquery.Document) types.ModInfo {
 	return types.ModInfo{
 		Name:             extractElementText(doc, "#pagetitle > h1"),
@@ -162,6 +181,10 @@ func ExtractModInfo(doc *goquery.Document) types.ModInfo {
 	}
 }
 
+// extractRequirements parses a goquery document to extract a list of requirements
+// from a table with the specified title. It returns a slice of Requirement objects
+// containing the name and notes for each requirement. If the table is not found,
+// it returns an empty slice.
 func extractRequirements(doc *goquery.Document, tableTitle string) []types.Requirement {
 	var requirements []types.Requirement
 
@@ -188,6 +211,8 @@ func extractRequirements(doc *goquery.Document, tableTitle string) []types.Requi
 	return requirements
 }
 
+// extractTags parses a goquery document to extract all tag labels from the tag
+// elements on the page. It returns a slice of strings representing the tags.
 func extractTags(doc *goquery.Document) []string {
 	// Find all tag elements
 	elements := doc.Find(".sideitems.side-tags .tags li a span.flex-label")

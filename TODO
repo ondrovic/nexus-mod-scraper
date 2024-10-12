@@ -1,12 +1,12 @@
 project:
   CLEANUP:
     ☐ cleanup code
-    ☐ docstrings
+    ✔ docstrings @done(24-10-12 16:35)
     ☐ remove commented out blocks
   cmd:
     cli:
       scrape.go:
-        ☐ fix the spinners, they aren't displaying the way I want
+        ✔ fix the spinners, they aren't displaying the way I want @done(24-10-12 17:39)
       extract.go:
         BUGFIX:
           ✔ Fix extractor not pulling latest cookie @done(24-10-12 10:21)

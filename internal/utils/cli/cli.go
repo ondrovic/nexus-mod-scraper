@@ -6,6 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// RegisterFlag registers a command-line flag for a Cobra command based on the provided
+// name, shorthand, value, usage description, and target variable. It supports bool,
+// string, float64, int, and string slice types, ensuring the target is a pointer.
+// If the value type is unsupported, the function panics.
 func RegisterFlag(cmd *cobra.Command, name, shorthand string, value interface{}, usage string, target interface{}) {
 	targetValue := reflect.ValueOf(target)
 

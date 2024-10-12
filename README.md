@@ -118,6 +118,7 @@ See [here](TODO)
 - [goquery](github.com/PuerkitoBio/goquery) - handles the heavy lifting for the scaping
 - [colorjson](github.com/TylerBrock/colorjson) - handles making things pretty
 - [kooky](github.com/browserutils/kooky) - handles the cookie extraction
-- [ysmrr](github.com/chelnak/ysmrr) - spinners
+- [yacspin](github.com/theckman/yacspin) - spinners
 - [cobra](github.com/spf13/cobra) - cli
 - [version](go.szostok.io/version) - version command
+- [termlink](github.com/savioxavier/termlink) - handles ctrl+click on files
