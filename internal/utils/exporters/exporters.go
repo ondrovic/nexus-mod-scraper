@@ -6,11 +6,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"nexus-mods-scraper/internal/types"
-	"nexus-mods-scraper/internal/utils"
-	"nexus-mods-scraper/internal/utils/formatters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
+	"github.com/savioxavier/termlink"
 )
 
+// DisplayResults formats the provided results as JSON and prints them using
+// pretty formatting. Returns an error if formatting the results fails.
 func DisplayResults(sc types.CliFlags, results types.Results) error {
 	jsonResults, err := formatters.FormatResultsAsJson(results.Mods)
 	if err != nil {
@@ -21,6 +24,10 @@ func DisplayResults(sc types.CliFlags, results types.Results) error {
 	return nil
 }
 
+// SaveCookiesToJson saves the provided data as a JSON file in the specified directory.
+// If the directory does not exist, it creates it. The file is created or truncated,
+// and the JSON data is written with pretty formatting (4 spaces indentation).
+// Returns an error if any file operations or data conversion fail.
 func SaveCookiesToJson(dir string, filename string, data interface{}) error {
 	// Check if the directory exists, if not create it
 	if err := utils.EnsureDirExists(dir); err != nil {
@@ -47,10 +54,14 @@ func SaveCookiesToJson(dir string, filename string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Extracted cookies saved to %s\n", fullPath)
+	fmt.Printf("Extracted cookies saved to %s\n", termlink.ColorLink(fullPath, fullPath, "green"))
 	return nil
 }
 
+// SaveModInfoToJson saves the provided mod information as a JSON file in the specified
+// directory with the given filename. It ensures the directory exists, formats the data
+// with pretty indentation (2 spaces), and writes it to the file. Returns the full file
+// path or an error if any operation fails.
 func SaveModInfoToJson(sc types.CliFlags, data interface{}, dir, filename string) (string, error) {
 
 	if err := utils.EnsureDirExists(dir); err != nil {

@@ -53,7 +53,7 @@ go run scraper.go
 The `scrape` command fetches mod information for a specific game and mod ID from NexusMods and outputs the results in JSON format.
 
 ```bash
-./nexus-mod-scraper scrape <game-name> <mod-id> [flags]
+./nexus-mods-scraper scrape <game-name> <mod-id> [flags]
 ```
 
 #### Flags:
@@ -69,7 +69,7 @@ The `scrape` command fetches mod information for a specific game and mod ID from
 #### Example:
 
 ```bash
-./nexus-mod-scraper scrape "skyrim" 12345 --display-results
+./nexus-mods-scraper scrape "skyrim" 12345 --display-results
 ```
 
 This will fetch mod ID `12345` for the game `Skyrim` and display the results in the terminal.
@@ -81,12 +81,13 @@ The `extract` command extracts valid cookies for NexusMods and saves them to a J
 #### Examples:
 
 ```bash
-./nexus-mod-scraper extract [flags]
+./nexus-mods-scraper extract [flags]
 ```
+
 This will extract the default cookies and save them to the default location.
 
 ```bash
-./nexus-mod-scraper extract -c "cookie_name","another_cookie","cookie"
+./nexus-mods-scraper extract -c "cookie_name","another_cookie","cookie"
 ```
 
 This will attempt to extract the cookies specified, if found they will be saved in the default location.
@@ -100,7 +101,7 @@ This will attempt to extract the cookies specified, if found they will be saved 
 #### Example:
 
 ```bash
-./nexus-mod-scraper extract --output-filename my-cookies.json
+./nexus-mods-scraper extract --output-filename my-cookies.json
 ```
 
 This will extract the cookies and save them as `my-cookies.json`.
@@ -110,14 +111,17 @@ This will extract the cookies and save them as `my-cookies.json`.
 - You must have valid cookies in your `session-cookies.json` file before scraping.
 - Ensure your `session-cookies.json` file is placed in the correct directory or specify the path with the `--cookie-directory` flag.
 - Written using [go v1.23.2](https://go.dev/dl/)
+
 ## Todo
 
 See [here](TODO)
 
 ## Main Packages used
+
 - [goquery](github.com/PuerkitoBio/goquery) - handles the heavy lifting for the scaping
 - [colorjson](github.com/TylerBrock/colorjson) - handles making things pretty
 - [kooky](github.com/browserutils/kooky) - handles the cookie extraction
-- [ysmrr](github.com/chelnak/ysmrr) - spinners
+- [yacspin](github.com/theckman/yacspin) - spinners
 - [cobra](github.com/spf13/cobra) - cli
 - [version](go.szostok.io/version) - version command
+- [termlink](github.com/savioxavier/termlink) - handles ctrl+click on files

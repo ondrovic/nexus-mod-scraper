@@ -7,12 +7,16 @@ import (
 	"strconv"
 	"strings"
 
-	"nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/TylerBrock/colorjson"
 	"github.com/fatih/color"
 )
+
+// CleanAndFormatText processes the input string by removing escape characters,
+// trimming quotes, and cleaning up whitespace. It returns a formatted string,
+// either joining two non-empty lines with a comma or joining multiple lines with spaces.
 
 func CleanAndFormatText(input string) string {
 	// Remove escape characters and trim quotes
@@ -41,16 +45,21 @@ func CleanAndFormatText(input string) string {
 	return strings.Join(nonEmptyLines, " ")
 }
 
-// Helper function to clean and trim text
+// CleanTextSelect extracts the text from a goquery selection, trims whitespace,
+// and returns the cleaned string.
 func CleanTextSelect(s *goquery.Selection) string {
 	return strings.TrimSpace(s.Text())
 }
 
-// Helper function to clean and trim text
+// CleanTextStr trims leading and trailing whitespace from the input string
+// and returns the cleaned string.
 func CleanTextStr(s string) string {
 	return strings.TrimSpace(s)
 }
 
+// CookieDomain extracts and returns the base domain from a given URL by removing
+// the protocol (http/https) and any paths or subdomains. It handles common domain
+// extensions such as .com, .org, and .net.
 func CookieDomain(url string) string {
 	// Remove http:// or https://
 	re := regexp.MustCompile(`^https?://(www\.)?`)
@@ -65,6 +74,8 @@ func CookieDomain(url string) string {
 	return url // Fallback in case regex doesn't match
 }
 
+// FormatResultsAsJson takes a ModInfo object, formats it as a pretty-printed JSON
+// string, and returns the result. If marshalling fails, it returns an error.
 func FormatResultsAsJson(mods types.ModInfo) (string, error) {
 	jsonData, err := json.MarshalIndent(mods, "", "    ")
 	if err != nil {
@@ -73,10 +84,15 @@ func FormatResultsAsJson(mods types.ModInfo) (string, error) {
 	return string(jsonData), nil
 }
 
+// PrintJson prints a given JSON-formatted string to the standard output.
 func PrintJson(data string) {
 	fmt.Println(data)
 }
 
+// PrintPrettyJson takes a JSON string, unmarshals it into an object, and prints
+// it with pretty formatting. Optionally, alternate colors can be used for keys
+// and strings if useAltColors is provided and set to true. Returns an error if
+// JSON unmarshalling or formatting fails.
 func PrintPrettyJson(data string, useAltColors ...bool) error {
 	var obj interface{}
 
@@ -101,11 +117,15 @@ func PrintPrettyJson(data string, useAltColors ...bool) error {
 	return nil
 }
 
+// RemoveHTTPPrefix removes the http or https prefix from a given URL and returns
+// the modified string.
 func RemoveHTTPPrefix(url string) string {
 	re := regexp.MustCompile(`^https?://`)
 	return re.ReplaceAllString(url, "")
 }
 
+// StrToInt converts a string to an int64. It returns the parsed integer and an error
+// if the conversion fails.
 func StrToInt(input string) (int64, error) {
 	result, err := strconv.ParseInt(input, 10, 64)
 	if err != nil {

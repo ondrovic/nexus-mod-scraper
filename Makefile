@@ -1,6 +1,6 @@
 export GO111MODULE=on
 GOOS := $(shell go env GOOS)
-APP_PATH := scraper.go
+APP_PATH := nexus-mods-scraper.go
 
 # determins the variables based on GOOS 
 ifeq ($(GOOS), windows)

@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+// ConcurrentFetch runs multiple tasks concurrently, returning the first error
+// encountered. If all tasks succeed, it returns nil.
 func ConcurrentFetch(tasks ...func() error) error {
 	var wg sync.WaitGroup
 	errChan := make(chan error, len(tasks))
@@ -32,6 +34,8 @@ func ConcurrentFetch(tasks ...func() error) error {
 	return nil
 }
 
+// EnsureDirExists checks if a directory exists at the given path and creates it
+// if it does not. Returns an error if the directory cannot be created or accessed.
 func EnsureDirExists(path string) error {
 	// Check if the directory exists
 	_, err := os.Stat(path)

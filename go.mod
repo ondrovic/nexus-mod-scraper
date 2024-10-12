@@ -1,4 +1,4 @@
-module nexus-mods-scraper
+module github.com/ondrovic/nexus-mods-scraper
 
 go 1.23.2
 
@@ -6,8 +6,10 @@ require (
 	github.com/PuerkitoBio/goquery v1.10.0
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/browserutils/kooky v0.2.2
-	github.com/chelnak/ysmrr v0.4.0
+	github.com/savioxavier/termlink v1.4.1
 	github.com/spf13/cobra v1.8.1
+	github.com/stretchr/testify v1.9.0
+	github.com/theckman/yacspin v0.13.12
 	go.szostok.io/version v1.2.0
 )
 
@@ -34,6 +36,7 @@ require (
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/pterm/pterm v0.12.79 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
