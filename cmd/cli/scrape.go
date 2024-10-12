@@ -88,7 +88,7 @@ func scrapeMod(sc types.CliFlags) error {
 
 	spnMessages := sm.AddSpinner("Setting up httpclient")
 
-	if err := httpclient.InitClient(sc.BaseUrl, sc.OutputDirectory, sc.CookieFile); err != nil {
+	if err := httpclient.InitClient(sc.BaseUrl, sc.CookieDirectory, sc.CookieFile); err != nil {
 		errMessage := "Error setting up httpclient"
 		if strings.Contains(err.Error(), "cannot find") {
 			errMessage += ", session-cookies.json missing, make sure you have created it and populated it, reference the README.md file"
