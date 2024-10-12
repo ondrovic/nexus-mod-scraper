@@ -1,0 +1,66 @@
+name: testing
+
+on:
+  push:
+    branches:
+      - "**" # Match all branches
+    tags-ignore:
+      - "*" # Ignore all tags
+  pull_request:
+    branches:
+      - "**" # Match all branches
+
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test -coverprofile=unit.coverage.out ./...
+# Uncomment for uploading when setup
+#     - name: Upload results to Codecov
+#       uses: codecov/codecov-action@v4
+#       with:
+#         files: ./unit.coverage.out
+#         fail_ci_if_error: false
+#         flags: unittests
+#         name: codecov-umbrella
+#         token: ${{ secrets.CODECOV_TOKEN }}
+#         verbose: true
+
+#     - name: Upload coverage report
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: coverage-report
+#         path: unit.coverage.out
+
+# codacy-coverage-reporter:
+#   needs: testing
+#   runs-on: ubuntu-latest
+#   name: codacy-coverage-reporter
+#   steps:
+#     - uses: actions/checkout@v2
+#     - name: Download coverage report
+#       uses: actions/download-artifact@v2
+#       with:
+#         name: coverage-report
+#     - name: Run codacy-coverage-reporter
+#       uses: codacy/codacy-coverage-reporter-action@v1.3.0
+#       with:
+#         project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+#         coverage-reports: unit.coverage.out
+#         force-coverage-parser: go
+

@@ -1,0 +1,86 @@
+version: 2
+
+project_name: nexus-mod-scraper
+
+env:
+ - GO_MAIN_PATH=scraper.go
+
+
+before:
+  hooks:
+    # Tidy
+    - go mod tidy
+    # Generate
+    - go generate ./...
+
+builds:
+  - id: windows
+    main: '{{ .Env.GO_MAIN_PATH }}'
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w
+      - -X go.szostok.io/version.version={{.Version}}
+      - -X go.szostok.io/version.buildDate={{.Date}}
+      - -X go.szostok.io/version.commit={{.FullCommit}}
+      - -X go.szostok.io/version.commitDate={{.CommitDate}}
+      - -X go.szostok.io/version.dirtyBuild={{.IsGitDirty}}
+
+  - id: linux
+    main: '{{ .Env.GO_MAIN_PATH }}'
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w
+      - -X go.szostok.io/version.version={{.Version}}
+      - -X go.szostok.io/version.buildDate={{.Date}}
+      - -X go.szostok.io/version.commit={{.FullCommit}}
+      - -X go.szostok.io/version.commitDate={{.CommitDate}}
+      - -X go.szostok.io/version.dirtyBuild={{.IsGitDirty}}
+
+  - id: macos
+    main: '{{ .Env.GO_MAIN_PATH }}'
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w
+      - -X go.szostok.io/version.version={{.Version}}
+      - -X go.szostok.io/version.buildDate={{.Date}}
+      - -X go.szostok.io/version.commit={{.FullCommit}}
+      - -X go.szostok.io/version.commitDate={{.CommitDate}}
+      - -X go.szostok.io/version.dirtyBuild={{.IsGitDirty}}
+
+archives:
+  - format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- if eq .Os "darwin" }}MacOs
+      {{- else }}{{ title .Os }}{{ end }}_
+      {{- if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
