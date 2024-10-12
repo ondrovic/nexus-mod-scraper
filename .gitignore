@@ -1,0 +1,34 @@
+# Exclude everything
+*
+
+# Allow the .gitignore itself to be tracked
+!.gitignore
+
+# Include .gitkeep files in any directory
+!**/.gitkeep
+
+# Include specific files in the root
+!README.md
+!LICENSE
+!generate_config.sh
+!goreleaser.yaml
+!deepsource.toml
+!TODO
+!Makefile
+
+# Include all directories recursively
+!*/
+!**/
+
+# Exclude .vscode folder
+.vscode/
+.vscode/*
+
+# Include the .github
+!.github/
+!.github/**
+
+# include source files
+!go.mod
+!go.sum
+!*.go*

@@ -1,0 +1,49 @@
+package cli
+
+import (
+	"reflect"
+
+	"github.com/spf13/cobra"
+)
+
+func RegisterFlag(cmd *cobra.Command, name, shorthand string, value interface{}, usage string, target interface{}) {
+	targetValue := reflect.ValueOf(target)
+
+	// Ensure target is a pointer
+	if targetValue.Kind() != reflect.Ptr {
+		panic("target must be a pointer")
+	}
+
+	// Dereference the pointer to get the actual value type
+	elemType := targetValue.Elem().Kind()
+
+	// Format the usage string, adding a newline and the default value if it's a bool flag
+	switch v := value.(type) {
+	case bool:
+		if !v {
+			usage += "\n (default false)"
+		} else {
+			usage += "\n"
+		}
+	case string:
+		usage += "\n"
+	case float64, int:
+		usage += "\n"
+	default:
+		panic("unsupported flag type")
+	}
+
+	// Register the flag based on the value type
+	switch elemType {
+	case reflect.Bool:
+		cmd.Flags().BoolVarP(target.(*bool), name, shorthand, value.(bool), usage)
+	case reflect.String:
+		cmd.Flags().StringVarP(target.(*string), name, shorthand, value.(string), usage)
+	case reflect.Float64:
+		cmd.Flags().Float64VarP(target.(*float64), name, shorthand, value.(float64), usage)
+	case reflect.Int:
+		cmd.Flags().IntVarP(target.(*int), name, shorthand, value.(int), usage)
+	default:
+		panic("unsupported flag type")
+	}
+}
