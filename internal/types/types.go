@@ -15,6 +15,7 @@ type CliFlags struct {
 	ModId           int64
 	OutputDirectory string
 	SaveResults     bool
+	ValidCookies    []string
 }
 
 func NewScraper() *CliFlags {

@@ -50,6 +50,7 @@ func initScrapeFlags(cmd *cobra.Command) {
 	cli.RegisterFlag(cmd, "display-results", "r", false, "Do you want to display the results in the terminal?", &options.DisplayResults)
 	cli.RegisterFlag(cmd, "save-results", "s", false, "Do you want to save the results to a JSON file?", &options.SaveResults)
 	cli.RegisterFlag(cmd, "output-directory", "o", "data", "Output directory to save files", &options.OutputDirectory)
+	cli.RegisterFlag(cmd, "valid-cookie-names", "c", []string{"nexusmods_session", "nexusmods_session_refresh"}, "Names of the cookies to extract", &options.ValidCookies)
 }
 
 func run(cmd *cobra.Command, args []string) error {
@@ -70,6 +71,7 @@ func run(cmd *cobra.Command, args []string) error {
 		ModId:           modId,
 		SaveResults:     viper.GetBool("save-results"),
 		OutputDirectory: viper.GetString("output-directory"),
+		ValidCookies:    viper.GetStringSlice("valid-cookie-names"),
 	}
 
 	return scrapeMod(scraper)
@@ -91,7 +93,7 @@ func scrapeMod(sc types.CliFlags) error {
 	if err := httpclient.InitClient(sc.BaseUrl, sc.CookieDirectory, sc.CookieFile); err != nil {
 		errMessage := "Error setting up httpclient"
 		if strings.Contains(err.Error(), "cannot find") {
-			errMessage += ", session-cookies.json missing, make sure you have created it and populated it, reference the README.md file"
+			errMessage += ", session-cookies.json missing"
 		}
 
 		spnMessages.ErrorWithMessagef("%s %v", errMessage, err)

@@ -2,7 +2,6 @@ package extractors
 
 import (
 	"errors"
-	"log"
 
 	"fmt"
 	"strings"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/browserutils/kooky"
+	_ "github.com/browserutils/kooky/browser/all"
 )
 
 // IsAdultContent checks if the page contains an adult content warning.
@@ -58,7 +58,7 @@ func CookieExtractor(domain string, validCookies []string) (map[string]string, e
 		storeCookies, err := store.ReadCookies(filters...)
 		if err != nil {
 			// Log the error and continue to the next store
-			log.Printf("Failed to read cookies from store: %v, error: %v", store, err)
+			// log.Printf("Failed to read cookies from store: %v, error: %v", store, err)
 			continue
 		}
 

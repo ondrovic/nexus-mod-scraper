@@ -27,7 +27,7 @@ func RegisterFlag(cmd *cobra.Command, name, shorthand string, value interface{},
 		}
 	case string:
 		usage += "\n"
-	case float64, int:
+	case float64, int, []string:
 		usage += "\n"
 	default:
 		panic("unsupported flag type")
@@ -43,6 +43,12 @@ func RegisterFlag(cmd *cobra.Command, name, shorthand string, value interface{},
 		cmd.Flags().Float64VarP(target.(*float64), name, shorthand, value.(float64), usage)
 	case reflect.Int:
 		cmd.Flags().IntVarP(target.(*int), name, shorthand, value.(int), usage)
+	case reflect.Slice:
+		if targetValue.Elem().Type().Elem().Kind() == reflect.String {
+			cmd.Flags().StringSliceVarP(target.(*[]string), name, shorthand, value.([]string), usage)
+		} else {
+			panic("unsupported slice type")
+		}
 	default:
 		panic("unsupported flag type")
 	}

@@ -9,8 +9,8 @@ project:
         ☐ fix the spinners, they aren't displaying the way I want
       extract.go:
         BUGFIX:
-          ☐ Fix extractor not pulling latest cookie
-          ☐ Renable the extraction command once fix
+          ✔ Fix extractor not pulling latest cookie @done(24-10-12 10:21)
+          ✔ Renable the extraction command once fix @done(24-10-12 10:21)
   Makefile:
     ✔ replace all PLACEHOLDER values @done(24-10-11 19:30)
   version.go:
@@ -24,9 +24,9 @@ project:
       GO_MAIN_PATH:
         ✔ replace PLACEHOLDER with actual path @done(24-10-11 19:28)
   readme.md:
-    ☐ update based on relevant project info
+    ✔ update based on relevant project info @done(24-10-12 10:15)
   testing:
     ☐ write tests
   .github:
     workflows:
-      ☐ verify everythign is setup
+      ✔ verify everythign is setup @done(24-10-12 10:15)
