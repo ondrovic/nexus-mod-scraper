@@ -16,11 +16,20 @@ require (
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
 	dario.cat/mergo v1.0.1 // indirect
+	github.com/Velocidex/json v0.0.0-20220224052537-92f3c0326e5a // indirect
+	github.com/Velocidex/ordereddict v0.0.0-20230909174157-2aa49cc5d11d // indirect
+	github.com/Velocidex/yaml/v2 v2.2.8 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/containerd/console v1.0.4 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
+	github.com/go-ini/ini v1.67.0 // indirect
+	github.com/go-sqlite/sqlite3 v0.0.0-20180313105335-53dd8e640ee7 // indirect
+	github.com/godbus/dbus/v5 v5.1.0 // indirect
+	github.com/gonuts/binary v0.2.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/keybase/go-keychain v0.0.0-20231219164618-57a3676c3af6 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -32,12 +41,14 @@ require (
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	github.com/zalando/go-keyring v0.2.5 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/term v0.25.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
+	www.velocidex.com/golang/go-ese v0.2.0 // indirect
 )
 
 require (
