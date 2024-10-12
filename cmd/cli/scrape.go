@@ -32,7 +32,7 @@ var (
 // It binds flags using Viper and adds the command to the root command for execution.
 func init() {
 	scrapeCmd = &cobra.Command{
-		Use:   "nexus-mods-scraper Scrape <game name> <mod id> [flags]",
+		Use:   "scrape <game name> <mod id> [flags]",
 		Short: "Scrape mod",
 		Long:  "Scrape mod for game and returns a JSON output",
 		Args:  cobra.ExactArgs(2),
