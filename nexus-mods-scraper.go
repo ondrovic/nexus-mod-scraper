@@ -1,8 +1,9 @@
 package main
 
 import (
-	"nexus-mods-scraper/cmd/cli"
 	"runtime"
+
+	"github.com/ondrovic/nexus-mods-scraper/cmd/cli"
 
 	sCli "github.com/ondrovic/common/utils/cli"
 )

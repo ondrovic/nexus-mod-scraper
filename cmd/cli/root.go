@@ -8,7 +8,7 @@ import (
 // description and setting up the command's usage for scraping Nexus Mods and returning
 // the information in JSON format.
 var RootCmd = &cobra.Command{
-	Use:   "scraper",
+	Use:   "nexus-mods-scraper",
 	Short: "A CLI tool to scrape https://nexusmods.com mods and return the information in JSON format",
 }
 

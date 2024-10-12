@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"nexus-mods-scraper/internal/types"
-	"nexus-mods-scraper/internal/utils/formatters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/browserutils/kooky"

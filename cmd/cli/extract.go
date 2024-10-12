@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"nexus-mods-scraper/internal/utils/cli"
-	"nexus-mods-scraper/internal/utils/exporters"
-	"nexus-mods-scraper/internal/utils/extractors"
-	"nexus-mods-scraper/internal/utils/formatters"
-	"nexus-mods-scraper/internal/utils/storage"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/cli"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/exporters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/extractors"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/storage"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

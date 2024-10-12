@@ -13,7 +13,7 @@ import (
 
 func TestGetDataPath_Windows(t *testing.T) {
 	localAppData := os.Getenv("LOCALAPPDATA")
-	expectedPath := filepath.Join(localAppData, "nexus-mod-scraper", "data")
+	expectedPath := filepath.Join(localAppData, "nexus-mods-scraper", "data")
 	actualPath := GetDataStoragePath()
 
 	assert.Equal(t, expectedPath, actualPath, "The Windows data path is incorrect.")

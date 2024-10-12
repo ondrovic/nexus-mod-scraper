@@ -7,15 +7,15 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"nexus-mods-scraper/internal/fetchers"
-	"nexus-mods-scraper/internal/httpclient"
-	"nexus-mods-scraper/internal/types"
-	"nexus-mods-scraper/internal/utils"
-	"nexus-mods-scraper/internal/utils/cli"
-	"nexus-mods-scraper/internal/utils/exporters"
-	"nexus-mods-scraper/internal/utils/formatters"
-	"nexus-mods-scraper/internal/utils/spinners"
-	"nexus-mods-scraper/internal/utils/storage"
+	"github.com/ondrovic/nexus-mods-scraper/internal/fetchers"
+	"github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/cli"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/exporters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/spinners"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/storage"
 
 	"path/filepath"
 	"strings"
@@ -32,8 +32,8 @@ var (
 // It binds flags using Viper and adds the command to the root command for execution.
 func init() {
 	scrapeCmd = &cobra.Command{
-		Use:   "scrape <game name> <mod id> [flags]",
-		Short: "Scape mod",
+		Use:   "nexus-mods-scraper Scrape <game name> <mod id> [flags]",
+		Short: "Scrape mod",
 		Long:  "Scrape mod for game and returns a JSON output",
 		Args:  cobra.ExactArgs(2),
 		RunE:  run,

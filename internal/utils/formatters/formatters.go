@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/TylerBrock/colorjson"

@@ -9,8 +9,8 @@ import (
 )
 
 // GetDataStoragePath returns the data storage path in the user's LOCALAPPDATA
-// directory, specifically for the nexus-mod-scraper application.
+// directory, specifically for the nexus-mods-scraper application.
 func GetDataStoragePath() string {
 	localAppData := os.Getenv("LOCALAPPDATA")
-	return filepath.Join(localAppData, "nexus-mod-scraper", "data")
+	return filepath.Join(localAppData, "nexus-mods-scraper", "data")
 }

@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"nexus-mods-scraper/internal/httpclient"
-	"nexus-mods-scraper/internal/types"
-	"nexus-mods-scraper/internal/utils"
-	"nexus-mods-scraper/internal/utils/extractors"
 	"strings"
 	"time"
+
+	"github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/extractors"
 
 	"github.com/PuerkitoBio/goquery"
 )

@@ -6,9 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"nexus-mods-scraper/internal/types"
-	"nexus-mods-scraper/internal/utils"
-	"nexus-mods-scraper/internal/utils/formatters"
+	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
+	"github.com/savioxavier/termlink"
 )
 
 // DisplayResults formats the provided results as JSON and prints them using
@@ -53,7 +54,7 @@ func SaveCookiesToJson(dir string, filename string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("Extracted cookies saved to %s\n", fullPath)
+	fmt.Printf("Extracted cookies saved to %s\n", termlink.ColorLink(fullPath, fullPath, "green"))
 	return nil
 }
 

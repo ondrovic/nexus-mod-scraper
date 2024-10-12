@@ -1,4 +1,4 @@
-module nexus-mods-scraper
+module github.com/ondrovic/nexus-mods-scraper
 
 go 1.23.2
 
