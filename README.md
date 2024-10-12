@@ -1,7 +1,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![releaser](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml)
 [![testing](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml)
-
+[![Go Report Card](https://goreportcard.com/badge/github.com/ondrovic/nexus-mods-scraper)](https://goreportcard.com/report/github.com/ondrovic/nexus-mods-scraper)
 # NexusMods Scraper CLI
 
 A powerful command-line tool to scrape mod information from [https://nexusmods.com](https://nexusmods.com) and return the results in JSON format. This tool also supports extracting cookies from the NexusMods site, which is require to properly scrape the data.
