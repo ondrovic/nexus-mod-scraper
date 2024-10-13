@@ -1,6 +1,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![releaser](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml)
 [![testing](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/ondrovic/nexus-mods-scraper/graph/badge.svg?token=RxpgtxqYis)](https://codecov.io/gh/ondrovic/nexus-mods-scraper)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ondrovic/nexus-mods-scraper)](https://goreportcard.com/report/github.com/ondrovic/nexus-mods-scraper)
 # NexusMods Scraper CLI
 
