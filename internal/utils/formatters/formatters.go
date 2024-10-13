@@ -17,7 +17,6 @@ import (
 // CleanAndFormatText processes the input string by removing escape characters,
 // trimming quotes, and cleaning up whitespace. It returns a formatted string,
 // either joining two non-empty lines with a comma or joining multiple lines with spaces.
-
 func CleanAndFormatText(input string) string {
 	// Remove escape characters and trim quotes
 	text := strings.Trim(strings.ReplaceAll(input, "\\n", "\n"), "\"")

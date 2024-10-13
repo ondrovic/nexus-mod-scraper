@@ -1,6 +1,10 @@
 package cli
 
 import (
+	"os"
+
+	"github.com/browserutils/kooky"
+	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
 	"github.com/ondrovic/nexus-mods-scraper/internal/utils/cli"
 	"github.com/ondrovic/nexus-mods-scraper/internal/utils/exporters"
 	"github.com/ondrovic/nexus-mods-scraper/internal/utils/extractors"
@@ -52,12 +56,12 @@ func ExtractCookies(cmd *cobra.Command, args []string) error {
 	domain := formatters.CookieDomain(options.BaseUrl)
 	sessionCookies := options.ValidCookies
 
-	extractedCookies, err := extractors.CookieExtractor(domain, sessionCookies)
+	extractedCookies, err := extractors.CookieExtractor(domain, sessionCookies, kooky.FindAllCookieStores)
 	if err != nil {
 		return err
 	}
 
-	if err := exporters.SaveCookiesToJson(options.OutputDirectory, outputFilename, extractedCookies); err != nil {
+	if err := exporters.SaveCookiesToJson(options.OutputDirectory, outputFilename, extractedCookies, os.OpenFile, utils.EnsureDirExists); err != nil {
 		return err
 	}
 

@@ -9,17 +9,16 @@ import (
 
 	"github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
 	"github.com/ondrovic/nexus-mods-scraper/internal/types"
-	"github.com/ondrovic/nexus-mods-scraper/internal/utils"
 	"github.com/ondrovic/nexus-mods-scraper/internal/utils/extractors"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-// FetchModInfoConcurrent retrieves mod information and file details concurrently for
-// a given mod ID and game. It validates URLs and uses concurrent fetch operations
-// for mod info and file info extraction. The results are populated in the Results struct,
-// and an error is returned if any fetch or extraction fails.
-func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, error) {
+// FetchModInfoConcurrent retrieves mod information and file details concurrently
+// for a specified mod ID and game. It validates URLs and uses provided functions
+// for concurrent fetching of mod info and file info extraction. The results are populated
+// in the Results struct, and an error is returned if any fetching or extraction step fails.
+func FetchModInfoConcurrent(baseUrl, game string, modId int64, concurrentFetch func(tasks ...func() error) error, fetchDocument func(targetURL string) (*goquery.Document, error)) (types.Results, error) {
 	modUrl := fmt.Sprintf("%s/%s/mods/%d", baseUrl, game, modId)
 
 	// Validate the initial URL
@@ -30,7 +29,7 @@ func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, e
 	var results types.Results
 
 	// Function to handle mod info fetch
-	err := utils.ConcurrentFetch(
+	err := concurrentFetch(
 		func() error {
 			doc, err := fetchDocument(modUrl)
 			if err != nil {
@@ -42,7 +41,7 @@ func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, e
 			}
 
 			results.Mods = extractors.ExtractModInfo(doc)
-			results.Mods.ModId = modId
+			results.Mods.ModID = modId
 			results.Mods.LastChecked = time.Now()
 			return nil
 		},
@@ -75,11 +74,11 @@ func FetchModInfoConcurrent(baseUrl, game string, modId int64) (types.Results, e
 	return results, nil
 }
 
-// fetchDocument sends an HTTP GET request to the target URL, manually attaches cookies
+// FetchDocument sends an HTTP GET request to the target URL, manually attaches cookies
 // from the HTTP client's cookie jar, and returns the response as a parsed goquery document.
 // It ensures a successful 200 OK status before parsing and returns an error if the request
 // or document parsing fails.
-func fetchDocument(targetURL string) (*goquery.Document, error) {
+func FetchDocument(targetURL string) (*goquery.Document, error) {
 	// Create a new HTTP GET request
 	req, err := http.NewRequest("GET", targetURL, nil)
 	if err != nil {

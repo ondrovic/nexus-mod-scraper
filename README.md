@@ -43,7 +43,7 @@ To just run the scraper without installing it:
 ```bash
 git clone git@github.com:ondrovic/nexus-mods-scraper.git
 cd nexus-mods-scraper
-go run scraper.go
+go run nexus-mods-scraper.go
 ```
 
 ## Usage
@@ -59,11 +59,11 @@ The `scrape` command fetches mod information for a specific game and mod ID from
 #### Flags:
 
 - `-u, --base-url` (default: `https://nexusmods.com`): Base URL for NexusMods.
-- `-d, --cookie-directory` (default: `data`): Directory where the cookie file is stored.
+- `-d, --cookie-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the cookie file is stored.
 - `-f, --cookie-filename` (default: `session-cookies.json`): Filename for the session cookies.
 - `-r, --display-results` (default: `false`): Display the results in the terminal.
 - `-s, --save-results` (default: `false`): Save the results to a JSON file.
-- `-o, --output-directory` (default: `data`): Directory where the JSON output will be saved.
+- `-o, --output-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the JSON output will be saved.
 - `-c, --valid-cookie-names` (default: `[]string{"nexusmods_session", "nexusmods_session_refresh"}`): Names of the cookies you wish to extract and use.
 
 #### Example:
@@ -94,7 +94,7 @@ This will attempt to extract the cookies specified, if found they will be saved 
 
 #### Flags:
 
-- `-d, --output-directory` (default: `data`): Directory where the output file is saved.
+- `-d, --output-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the output file is saved.
 - `-f, --output-filename` (default: `session-cookies.json`): Filename to save the session cookies.
 - `-c, --valid-cookie-names` (default: `[]string{"nexusmods_session", "nexusmods_session_refresh"}`): Names of the cookies you wish to extract and use.
 

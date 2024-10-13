@@ -34,16 +34,16 @@ func IsAdultContent(doc *goquery.Document, modId int64) bool {
 	return false
 }
 
-// CookieExtractor extracts cookies for a given domain from all available browser
-// cookie stores. It filters cookies based on the provided validCookies list and
-// returns a map of matching cookies. Returns an error if no cookies or stores
-// are found, or if reading cookies from a store fails.
-func CookieExtractor(domain string, validCookies []string) (map[string]string, error) {
+// CookieExtractor extracts valid cookies for a specified domain from available cookie stores.
+// It takes a domain, a list of valid cookie names, and a store provider function that returns
+// cookie stores. Returns a map of cookie names and values, or an error if no cookies are found
+// or if an error occurs while reading the stores.
+func CookieExtractor(domain string, validCookies []string, storeProvider func() []kooky.CookieStore) (map[string]string, error) {
 	// Declare a map to store cookies
 	cookies := make(map[string]string)
 
 	// Find all available cookie stores (for all browsers)
-	cookieStores := kooky.FindAllCookieStores()
+	cookieStores := storeProvider()
 	if len(cookieStores) == 0 {
 		return nil, errors.New("no cookie stores found")
 	}
@@ -61,8 +61,6 @@ func CookieExtractor(domain string, validCookies []string) (map[string]string, e
 		// Read cookies based on the filters
 		storeCookies, err := store.ReadCookies(filters...)
 		if err != nil {
-			// Log the error and continue to the next store
-			// log.Printf("Failed to read cookies from store: %v, error: %v", store, err)
 			continue
 		}
 
@@ -94,10 +92,13 @@ func CookieExtractor(domain string, validCookies []string) (map[string]string, e
 func extractChangeLogs(doc *goquery.Document) []types.ChangeLog {
 	var changeLogs []types.ChangeLog
 
-	doc.Find("#section > div > div.wrap.flex > div:nth-child(2) > div > div.tabcontent.tabcontent-mod-page > div.container.tab-description > div.accordionitems > dl > dd:nth-child(8) > div > ul > li").Each(func(i int, s *goquery.Selection) {
+	// Find each list item (li) containing a version and its change log notes
+	doc.Find("div.accordionitems > dl > dd > div > ul > li").Each(func(i int, s *goquery.Selection) {
+		// Extract the version from the h3 tag within this li element
 		version := strings.TrimSpace(s.Find("h3").Text())
 
 		var notes []string
+		// Extract the notes from the log-change div inside this li element
 		s.Find("div.log-change > ul > li").Each(func(j int, li *goquery.Selection) {
 			note := strings.TrimSpace(li.Text())
 			if note != "" {
@@ -105,6 +106,7 @@ func extractChangeLogs(doc *goquery.Document) []types.ChangeLog {
 			}
 		})
 
+		// Only add the change log if both version and notes exist
 		if version != "" && len(notes) > 0 {
 			changeLogs = append(changeLogs, types.ChangeLog{
 				Version: version,
@@ -131,10 +133,15 @@ func extractCleanTextExcludingElementText(doc *goquery.Document, selector, elem 
 		return ""
 	}
 
+	// Remove the specified element
 	selection.Find(elem).Remove()
+
+	// Get the cleaned text
 	text := selection.Text()
 
-	return formatters.CleanAndFormatText(text)
+	// Clean up any extra spaces
+	// Condense multiple spaces into one and trim leading/trailing spaces
+	return formatters.CleanAndFormatText(strings.Join(strings.Fields(text), " "))
 }
 
 // ExtractFileInfo parses a goquery document to extract file information, such as

@@ -14,7 +14,7 @@ type CliFlags struct {
 	CookieFile      string
 	DisplayResults  bool
 	GameName        string
-	ModId           int64
+	ModID           int64
 	OutputDirectory string
 	SaveResults     bool
 	ValidCookies    []string
@@ -48,7 +48,7 @@ type ModInfo struct {
 	LastChecked      time.Time     `json:"LastChecked,omitempty"`
 	LastUpdated      string        `json:"LastUpdated,omitempty"`
 	LatestVersion    string        `json:"LatestVersion,omitempty"`
-	ModId            int64         `json:"ModID,omitempty"`
+	ModID            int64         `json:"ModID,omitempty"`
 	ModsUsing        []Requirement `json:"ModsUsing,omitempty"`
 	Name             string        `json:"Name,omitempty"`
 	OriginalUpload   string        `json:"OriginalUpload,omitempty"`

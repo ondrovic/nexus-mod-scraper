@@ -66,7 +66,7 @@ func run(cmd *cobra.Command, args []string) error {
 	if !options.DisplayResults && !options.SaveResults {
 		return fmt.Errorf("at least one of --display-results (-r) or --save-results (-s) must be enabled")
 	}
-	modId, err := formatters.StrToInt(args[1])
+	modID, err := formatters.StrToInt(args[1])
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func run(cmd *cobra.Command, args []string) error {
 		CookieFile:      viper.GetString("cookie-filename"),
 		DisplayResults:  viper.GetBool("display-results"),
 		GameName:        args[0],
-		ModId:           modId,
+		ModID:           modID,
 		SaveResults:     viper.GetBool("save-results"),
 		OutputDirectory: viper.GetString("output-directory"),
 		ValidCookies:    viper.GetStringSlice("valid-cookie-names"),
@@ -106,13 +106,13 @@ func scrapeMod(sc types.CliFlags) error {
 	httpSpinner.Stop()
 
 	// Create and start the spinner for scraping mod info
-	scrapeSpinner := spinners.CreateSpinner(fmt.Sprintf("Scraping modId: %d for game: %s", sc.ModId, sc.GameName), "✓", "Mod scraping complete", "✗", "Mod scraping failed")
+	scrapeSpinner := spinners.CreateSpinner(fmt.Sprintf("Scraping modID: %d for game: %s", sc.ModID, sc.GameName), "✓", "Mod scraping complete", "✗", "Mod scraping failed")
 	if err := scrapeSpinner.Start(); err != nil {
 		return fmt.Errorf("failed to start spinner: %w", err)
 	}
 
 	// Scrape Mod Info
-	results, err := fetchers.FetchModInfoConcurrent(sc.BaseUrl, sc.GameName, sc.ModId)
+	results, err := fetchers.FetchModInfoConcurrent(sc.BaseUrl, sc.GameName, sc.ModID, utils.ConcurrentFetch, fetchers.FetchDocument)
 	if err != nil {
 		scrapeSpinner.StopFailMessage(fmt.Sprintf("Error scraping mod: %v", err))
 		scrapeSpinner.StopFail()
@@ -129,7 +129,7 @@ func scrapeMod(sc types.CliFlags) error {
 		displaySpinner.Stop() // Temporarily stop spinner for clean output
 
 		// Print the results
-		if err := exporters.DisplayResults(sc, results); err != nil {
+		if err := exporters.DisplayResults(sc, results, formatters.FormatResultsAsJson); err != nil {
 			fmt.Println("Error displaying results:", err)
 			displaySpinner.StopFail()
 			return err
@@ -151,8 +151,8 @@ func scrapeMod(sc types.CliFlags) error {
 			return err
 		}
 
-		outputFilename := fmt.Sprintf("%s %d", strings.ToLower(results.Mods.Name), results.Mods.ModId)
-		if item, err := exporters.SaveModInfoToJson(sc, results, outputGameDirectory, outputFilename); err != nil {
+		outputFilename := fmt.Sprintf("%s %d", strings.ToLower(results.Mods.Name), results.Mods.ModID)
+		if item, err := exporters.SaveModInfoToJson(sc, results, outputGameDirectory, outputFilename, utils.EnsureDirExists); err != nil {
 			saveSpinner.StopFailMessage(fmt.Sprintf("Error saving results: %v", err))
 			saveSpinner.StopFail()
 			return err
