@@ -32,7 +32,10 @@ func init() {
 		Short: "Extract cookies",
 		Long:  "Extract cookies for https://nexusmods.com to use with the scraper, will save to json file",
 		Args:  cobra.NoArgs,
-		RunE:  ExtractCookies,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			// Call the actual ExtractCookies function with the default store provider
+			return ExtractCookies(cmd, args, kooky.FindAllCookieStores)
+		},
 	}
 
 	initExtractFlags(extractCmd)
@@ -52,11 +55,12 @@ func initExtractFlags(cmd *cobra.Command) {
 // ExtractCookies extracts cookies from the specified domain using the valid cookie names,
 // then saves them as a JSON file in the designated output directory. Returns an error
 // if cookie extraction or saving fails.
-func ExtractCookies(cmd *cobra.Command, args []string) error {
+func ExtractCookies(cmd *cobra.Command, args []string, storeProvider func() []kooky.CookieStore) error {
 	domain := formatters.CookieDomain(options.BaseUrl)
 	sessionCookies := options.ValidCookies
 
-	extractedCookies, err := extractors.CookieExtractor(domain, sessionCookies, kooky.FindAllCookieStores)
+	// Use the passed storeProvider instead of the default kooky.FindAllCookieStores
+	extractedCookies, err := extractors.CookieExtractor(domain, sessionCookies, storeProvider)
 	if err != nil {
 		return err
 	}

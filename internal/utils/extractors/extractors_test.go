@@ -22,11 +22,11 @@ type MockCookieStore struct {
 
 // Implement http.CookieJar methods (since CookieStore embeds http.CookieJar)
 func (m *MockCookieStore) SetCookies(u *url.URL, cookies []*http.Cookie) {
-	// Not needed for our tests, but you can implement if necessary
+	// Needed for our tests, but you can implement if necessary
 }
 
 func (m *MockCookieStore) Cookies(u *url.URL) []*http.Cookie {
-	// Not needed for our tests, but you can implement if necessary
+	// Needed for our tests, but you can implement if necessary
 	return nil
 }
 
