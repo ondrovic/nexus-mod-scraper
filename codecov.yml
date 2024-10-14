@@ -1,6 +1,6 @@
 coverage:
-  range:
-  - 50.0
-  - 75.0
-  github_checks:
-    annotations: true
+  range: 50..75
+  round: down
+  precision: 2
+github_checks: 
+  annotations: true
