@@ -1,4 +1,10 @@
 coverage:
+  status:
+    project:
+      default:
+        target: "75%"
+        threshold: "1%"
+        base: auto
   range: 50..75
   round: down
   precision: 2
