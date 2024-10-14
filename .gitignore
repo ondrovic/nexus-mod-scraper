@@ -13,6 +13,7 @@
 !generate_config.sh
 !goreleaser.yaml
 !deepsource.toml
+!codecov.yml
 !TODO
 !Makefile
 

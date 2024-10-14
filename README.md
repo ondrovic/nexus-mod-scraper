@@ -21,7 +21,9 @@ To run the scraper, you need to have a valid `session-cookies.json` file contain
 ```
 
 **Important Note:**  
-You need to log into your NexusMods account in your browser.
+You need to have logged into your NexusMods account in your browser.
+
+The generation of this is now provided by the [extract command](#extract-cookies-command)
 
 ## Installation
 
@@ -66,6 +68,15 @@ The `scrape` command fetches mod information for a specific game and mod ID from
 - `-s, --save-results` (default: `false`): Save the results to a JSON file.
 - `-o, --output-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the JSON output will be saved.
 - `-c, --valid-cookie-names` (default: `[]string{"nexusmods_session", "nexusmods_session_refresh"}`): Names of the cookies you wish to extract and use.
+
+#### Flags Notes:
+
+At least one of these flags needs to be provided:
+
+```bash
+-r, --display-results
+-s, --save-results
+```
 
 #### Example:
 
