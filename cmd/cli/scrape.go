@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/savioxavier/termlink"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,6 +27,12 @@ var (
 	options = types.CliFlags{}
 	// scrapeCmd is a Cobra command used for scraping operations in the application.
 	scrapeCmd = &cobra.Command{}
+	// fetchModInfoFunc is a variable that holds a reference to the function used for
+	// concurrently fetching mod information.
+	fetchModInfoFunc = fetchers.FetchModInfoConcurrent
+	// fetchDocumentFunc is a variable that holds a reference to the function used for
+	// fetching HTML documents from a given URL.
+	fetchDocumentFunc = fetchers.FetchDocument
 )
 
 // init initializes the scrape command with usage, description, and argument validation.
@@ -83,14 +90,19 @@ func run(cmd *cobra.Command, args []string) error {
 		ValidCookies:    viper.GetStringSlice("valid-cookie-names"),
 	}
 
-	return scrapeMod(scraper)
+	return scrapeMod(scraper, fetchModInfoFunc, fetchDocumentFunc)
 }
 
 // scrapeMod orchestrates the process of scraping mod information, including setting up
 // the HTTP client, scraping mod info, displaying results, and saving results based on
-// the provided command-line flags. It utilizes spinners to indicate progress throughout
-// the operations and returns an error if any step fails.
-func scrapeMod(sc types.CliFlags) error {
+// the provided command-line flags. It uses spinners to indicate progress throughout the
+// operations and accepts functions for fetching mod info and documents, returning an error
+// if any step fails.
+func scrapeMod(
+	sc types.CliFlags,
+	fetchModInfoFunc func(baseUrl, game string, modId int64, concurrentFetch func(tasks ...func() error) error, fetchDocument func(targetURL string) (*goquery.Document, error)) (types.Results, error),
+	fetchDocumentFunc func(targetURL string) (*goquery.Document, error),
+) error {
 	// Create and start the main spinner for HTTP client setup
 	httpSpinner := spinners.CreateSpinner("Setting up HTTP client", "✓", "HTTP client setup complete", "✗", "HTTP client setup failed")
 	if err := httpSpinner.Start(); err != nil {
@@ -112,7 +124,7 @@ func scrapeMod(sc types.CliFlags) error {
 	}
 
 	// Scrape Mod Info
-	results, err := fetchers.FetchModInfoConcurrent(sc.BaseUrl, sc.GameName, sc.ModID, utils.ConcurrentFetch, fetchers.FetchDocument)
+	results, err := fetchModInfoFunc(sc.BaseUrl, sc.GameName, sc.ModID, utils.ConcurrentFetch, fetchDocumentFunc)
 	if err != nil {
 		scrapeSpinner.StopFailMessage(fmt.Sprintf("Error scraping mod: %v", err))
 		scrapeSpinner.StopFail()

@@ -1,34 +1,15 @@
 package fetchers
 
 import (
-	// "errors"
-	// "io/ioutil"
-	// "fmt"
-	// "io"
+	"github.com/PuerkitoBio/goquery"
+	"github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
-
-	// "testing"
-
-	"github.com/PuerkitoBio/goquery"
-	"github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
-
-	// "github.com/ondrovic/nexus-mods-scraper/internal/types"
-	// "github.com/ondrovic/nexus-mods-scraper/internal/utils"
-
-	// "github.com/ondrovic/nexus-mods-scraper/internal/utils/extractors"
-
-	// "github.com/ondrovic/nexus-mods-scraper/internal/httpclient"
-	// "github.com/ondrovic/nexus-mods-scraper/internal/utils"
-	// "github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	// "github.com/ondrovic/nexus-mods-scraper/internal/fetchers"
-	// "github.com/ondrovic/nexus-mods-scraper/internal/types"
-	// "github.com/ondrovic/nexus-mods-scraper/internal/utils"
 )
 
 type Mocker struct {
@@ -60,7 +41,7 @@ var mockFetchDocument = func(_ string) (*goquery.Document, error) {
 	return doc, nil
 }
 
-var mockConcurrentFetch = func(tasks ...func() error) error { // Changed '==' to '='
+var mockConcurrentFetch = func(tasks ...func() error) error {
 	// Mock behavior: run all tasks sequentially without concurrency for simplicity in testing
 	for _, task := range tasks {
 		if err := task(); err != nil {
@@ -90,12 +71,6 @@ func TestFetchModInfoConcurrent_Success(t *testing.T) {
 		Body:       io.NopCloser(strings.NewReader(`<html><h1>Mocked HTML content</h1></html>`)),
 	}
 	mockClient.On("Do", mock.Anything).Return(mockResponse, nil)
-
-	mockFetchDocument := func(_ string) (*goquery.Document, error) {
-		html := `<html><h1>Mocked HTML content</h1></html>`
-		doc, _ := goquery.NewDocumentFromReader(strings.NewReader(html))
-		return doc, nil
-	}
 
 	// Act
 	results, err := FetchModInfoConcurrent("https://example.com", "game", 12345, mockConcurrentFetch, mockFetchDocument)
