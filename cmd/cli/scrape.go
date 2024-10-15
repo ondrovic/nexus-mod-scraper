@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/savioxavier/termlink"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -26,6 +27,12 @@ var (
 	options = types.CliFlags{}
 	// scrapeCmd is a Cobra command used for scraping operations in the application.
 	scrapeCmd = &cobra.Command{}
+	// fetchModInfoFunc is a variable that holds a reference to the function used for
+	// concurrently fetching mod information.
+	fetchModInfoFunc = fetchers.FetchModInfoConcurrent
+	// fetchDocumentFunc is a variable that holds a reference to the function used for
+	// fetching HTML documents from a given URL.
+	fetchDocumentFunc = fetchers.FetchDocument
 )
 
 // init initializes the scrape command with usage, description, and argument validation.
@@ -66,7 +73,7 @@ func run(cmd *cobra.Command, args []string) error {
 	if !options.DisplayResults && !options.SaveResults {
 		return fmt.Errorf("at least one of --display-results (-r) or --save-results (-s) must be enabled")
 	}
-	modId, err := formatters.StrToInt(args[1])
+	modID, err := formatters.StrToInt(args[1])
 	if err != nil {
 		return err
 	}
@@ -77,20 +84,25 @@ func run(cmd *cobra.Command, args []string) error {
 		CookieFile:      viper.GetString("cookie-filename"),
 		DisplayResults:  viper.GetBool("display-results"),
 		GameName:        args[0],
-		ModId:           modId,
+		ModID:           modID,
 		SaveResults:     viper.GetBool("save-results"),
 		OutputDirectory: viper.GetString("output-directory"),
 		ValidCookies:    viper.GetStringSlice("valid-cookie-names"),
 	}
 
-	return scrapeMod(scraper)
+	return scrapeMod(scraper, fetchModInfoFunc, fetchDocumentFunc)
 }
 
 // scrapeMod orchestrates the process of scraping mod information, including setting up
 // the HTTP client, scraping mod info, displaying results, and saving results based on
-// the provided command-line flags. It utilizes spinners to indicate progress throughout
-// the operations and returns an error if any step fails.
-func scrapeMod(sc types.CliFlags) error {
+// the provided command-line flags. It uses spinners to indicate progress throughout the
+// operations and accepts functions for fetching mod info and documents, returning an error
+// if any step fails.
+func scrapeMod(
+	sc types.CliFlags,
+	fetchModInfoFunc func(baseUrl, game string, modId int64, concurrentFetch func(tasks ...func() error) error, fetchDocument func(targetURL string) (*goquery.Document, error)) (types.Results, error),
+	fetchDocumentFunc func(targetURL string) (*goquery.Document, error),
+) error {
 	// Create and start the main spinner for HTTP client setup
 	httpSpinner := spinners.CreateSpinner("Setting up HTTP client", "✓", "HTTP client setup complete", "✗", "HTTP client setup failed")
 	if err := httpSpinner.Start(); err != nil {
@@ -106,13 +118,13 @@ func scrapeMod(sc types.CliFlags) error {
 	httpSpinner.Stop()
 
 	// Create and start the spinner for scraping mod info
-	scrapeSpinner := spinners.CreateSpinner(fmt.Sprintf("Scraping modId: %d for game: %s", sc.ModId, sc.GameName), "✓", "Mod scraping complete", "✗", "Mod scraping failed")
+	scrapeSpinner := spinners.CreateSpinner(fmt.Sprintf("Scraping modID: %d for game: %s", sc.ModID, sc.GameName), "✓", "Mod scraping complete", "✗", "Mod scraping failed")
 	if err := scrapeSpinner.Start(); err != nil {
 		return fmt.Errorf("failed to start spinner: %w", err)
 	}
 
 	// Scrape Mod Info
-	results, err := fetchers.FetchModInfoConcurrent(sc.BaseUrl, sc.GameName, sc.ModId)
+	results, err := fetchModInfoFunc(sc.BaseUrl, sc.GameName, sc.ModID, utils.ConcurrentFetch, fetchDocumentFunc)
 	if err != nil {
 		scrapeSpinner.StopFailMessage(fmt.Sprintf("Error scraping mod: %v", err))
 		scrapeSpinner.StopFail()
@@ -129,7 +141,7 @@ func scrapeMod(sc types.CliFlags) error {
 		displaySpinner.Stop() // Temporarily stop spinner for clean output
 
 		// Print the results
-		if err := exporters.DisplayResults(sc, results); err != nil {
+		if err := exporters.DisplayResults(sc, results, formatters.FormatResultsAsJson); err != nil {
 			fmt.Println("Error displaying results:", err)
 			displaySpinner.StopFail()
 			return err
@@ -151,8 +163,8 @@ func scrapeMod(sc types.CliFlags) error {
 			return err
 		}
 
-		outputFilename := fmt.Sprintf("%s %d", strings.ToLower(results.Mods.Name), results.Mods.ModId)
-		if item, err := exporters.SaveModInfoToJson(sc, results, outputGameDirectory, outputFilename); err != nil {
+		outputFilename := fmt.Sprintf("%s %d", strings.ToLower(results.Mods.Name), results.Mods.ModID)
+		if item, err := exporters.SaveModInfoToJson(sc, results, outputGameDirectory, outputFilename, utils.EnsureDirExists); err != nil {
 			saveSpinner.StopFailMessage(fmt.Sprintf("Error saving results: %v", err))
 			saveSpinner.StopFail()
 			return err

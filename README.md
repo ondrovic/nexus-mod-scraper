@@ -1,6 +1,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![releaser](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/releaser.yml)
 [![testing](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml/badge.svg)](https://github.com/ondrovic/nexus-mods-scraper/actions/workflows/testing.yml)
+[![codecov](https://codecov.io/gh/ondrovic/nexus-mods-scraper/graph/badge.svg?token=RxpgtxqYis)](https://codecov.io/gh/ondrovic/nexus-mods-scraper)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ondrovic/nexus-mods-scraper)](https://goreportcard.com/report/github.com/ondrovic/nexus-mods-scraper)
 # NexusMods Scraper CLI
 
@@ -20,7 +21,9 @@ To run the scraper, you need to have a valid `session-cookies.json` file contain
 ```
 
 **Important Note:**  
-You need to log into your NexusMods account in your browser.
+You need to have logged into your NexusMods account in your browser.
+
+The generation of this is now provided by the [extract command](#extract-cookies-command)
 
 ## Installation
 
@@ -43,7 +46,7 @@ To just run the scraper without installing it:
 ```bash
 git clone git@github.com:ondrovic/nexus-mods-scraper.git
 cd nexus-mods-scraper
-go run scraper.go
+go run nexus-mods-scraper.go
 ```
 
 ## Usage
@@ -59,12 +62,21 @@ The `scrape` command fetches mod information for a specific game and mod ID from
 #### Flags:
 
 - `-u, --base-url` (default: `https://nexusmods.com`): Base URL for NexusMods.
-- `-d, --cookie-directory` (default: `data`): Directory where the cookie file is stored.
+- `-d, --cookie-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the cookie file is stored.
 - `-f, --cookie-filename` (default: `session-cookies.json`): Filename for the session cookies.
 - `-r, --display-results` (default: `false`): Display the results in the terminal.
 - `-s, --save-results` (default: `false`): Save the results to a JSON file.
-- `-o, --output-directory` (default: `data`): Directory where the JSON output will be saved.
+- `-o, --output-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the JSON output will be saved.
 - `-c, --valid-cookie-names` (default: `[]string{"nexusmods_session", "nexusmods_session_refresh"}`): Names of the cookies you wish to extract and use.
+
+#### Flags Notes:
+
+At least one of these flags needs to be provided:
+
+```bash
+-r, --display-results
+-s, --save-results
+```
 
 #### Example:
 
@@ -94,7 +106,7 @@ This will attempt to extract the cookies specified, if found they will be saved 
 
 #### Flags:
 
-- `-d, --output-directory` (default: `data`): Directory where the output file is saved.
+- `-d, --output-directory` (default: `~/.nexus-mods-scraper/data`): Directory where the output file is saved.
 - `-f, --output-filename` (default: `session-cookies.json`): Filename to save the session cookies.
 - `-c, --valid-cookie-names` (default: `[]string{"nexusmods_session", "nexusmods_session_refresh"}`): Names of the cookies you wish to extract and use.
 
@@ -112,9 +124,6 @@ This will extract the cookies and save them as `my-cookies.json`.
 - Ensure your `session-cookies.json` file is placed in the correct directory or specify the path with the `--cookie-directory` flag.
 - Written using [go v1.23.2](https://go.dev/dl/)
 
-## Todo
-
-See [here](TODO)
 
 ## Main Packages used
 
