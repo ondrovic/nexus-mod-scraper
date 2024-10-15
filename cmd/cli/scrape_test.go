@@ -138,9 +138,14 @@ func TestScrapeMod_WithMockedFunctions(t *testing.T) {
 	// Create a temporary session-cookies.json file
 	tempFilePath := filepath.Join(tempDir, "session-cookies.json")
 	err := os.WriteFile(tempFilePath, []byte("{}"), 0644) // Create an empty JSON file
-	require.NoError(t, err) // Ensure the file was created successfully
+	require.NoError(t, err)                               // Ensure the file was created successfully
 
-	// Prepare test CliFlags with the temporary directory and file
+	// Create a temporary directory for output
+	tempOutputDir := filepath.Join(tempDir, "output")
+	err = os.Mkdir(tempOutputDir, 0755) // Ensure the output directory is created
+	require.NoError(t, err)
+
+	// Prepare test CliFlags with the temporary directories
 	sc := types.CliFlags{
 		BaseUrl:         "https://somesite.com",
 		CookieDirectory: tempDir,
@@ -149,7 +154,7 @@ func TestScrapeMod_WithMockedFunctions(t *testing.T) {
 		GameName:        "game",
 		ModID:           1234,
 		SaveResults:     true,
-		OutputDirectory: "/output",
+		OutputDirectory: tempOutputDir, // Use the temporary output directory
 	}
 
 	// Act
@@ -158,4 +163,3 @@ func TestScrapeMod_WithMockedFunctions(t *testing.T) {
 	// Assert
 	assert.NoError(t, err)
 }
-
