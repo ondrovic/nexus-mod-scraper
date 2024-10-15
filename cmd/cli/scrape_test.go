@@ -10,8 +10,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ondrovic/nexus-mods-scraper/internal/types"
-
-	// "github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -57,15 +55,6 @@ var mockFetchModInfoConcurrent = func(baseUrl, game string, modId int64, concurr
 			ModID: modId,
 		},
 	}, nil
-}
-
-func (m *Mocker) ScrapeMod(
-	sc types.CliFlags,
-	fetchModInfoFunc func(baseUrl, game string, modId int64, concurrentFetch func(tasks ...func() error) error, fetchDocument func(targetURL string) (*goquery.Document, error)) (types.Results, error),
-	fetchDocumentFunc func(targetURL string) (*goquery.Document, error),
-) error {
-	args := m.Called(sc, fetchModInfoFunc, fetchDocumentFunc)
-	return args.Error(0)
 }
 
 // Spinner mocks

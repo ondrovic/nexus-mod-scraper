@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	// "github.com/ondrovic/nexus-mods-scraper/internal/types"
 	"github.com/stretchr/testify/assert"
 )
 

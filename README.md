@@ -124,9 +124,6 @@ This will extract the cookies and save them as `my-cookies.json`.
 - Ensure your `session-cookies.json` file is placed in the correct directory or specify the path with the `--cookie-directory` flag.
 - Written using [go v1.23.2](https://go.dev/dl/)
 
-## Todo
-
-See [here](TODO)
 
 ## Main Packages used
 

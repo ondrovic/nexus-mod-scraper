@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	// "reflect"
 )
 
 func TestRegisterFlag_BoolFlag(t *testing.T) {

@@ -96,16 +96,11 @@ func FetchDocument(targetURL string) (*goquery.Document, error) {
 	}
 	req.Header.Set("Cookie", strings.Join(cookieHeader, "; "))
 
-	// Check the request headers (should include the Cookie header now)
-	// fmt.Printf("Request Headers: %v\n", req.Header)
-
 	// Use the global httpclient.Client to make the request
 	resp, err := httpclient.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
-	// fmt.Printf("Response Headers: %v\n", resp.Header)
 
 	defer resp.Body.Close()
 
