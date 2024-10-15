@@ -3,16 +3,20 @@ package cli
 import (
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/ondrovic/nexus-mods-scraper/internal/types"
+
 	// "github.com/ondrovic/nexus-mods-scraper/internal/utils/formatters"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 // Mock structures for each dependency
@@ -128,11 +132,19 @@ func TestRun_InvalidModID(t *testing.T) {
 }
 
 func TestScrapeMod_WithMockedFunctions(t *testing.T) {
-	// Prepare test CliFlags
+	// Create a temporary directory for the test
+	tempDir := t.TempDir()
+
+	// Create a temporary session-cookies.json file
+	tempFilePath := filepath.Join(tempDir, "session-cookies.json")
+	err := os.WriteFile(tempFilePath, []byte("{}"), 0644) // Create an empty JSON file
+	require.NoError(t, err) // Ensure the file was created successfully
+
+	// Prepare test CliFlags with the temporary directory and file
 	sc := types.CliFlags{
 		BaseUrl:         "https://somesite.com",
-		CookieDirectory: "/tmp",
-		CookieFile:      "session-cookies.json",
+		CookieDirectory: tempDir,
+		CookieFile:      "session-cookies.json", // Just the filename, the directory is provided in CookieDirectory
 		DisplayResults:  true,
 		GameName:        "game",
 		ModID:           1234,
@@ -141,8 +153,9 @@ func TestScrapeMod_WithMockedFunctions(t *testing.T) {
 	}
 
 	// Act
-	err := scrapeMod(sc, mockFetchModInfoConcurrent, mockFetchDocument)
+	err = scrapeMod(sc, mockFetchModInfoConcurrent, mockFetchDocument)
 
 	// Assert
 	assert.NoError(t, err)
 }
+
